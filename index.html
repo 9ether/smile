@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-window {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #chat-log {
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        input[type="password"] {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(0, 255, 0, 0.1);
+            color: #0f0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-window">
+        <div id="chat-log"></div>
+        <div class="chat-input">
+            <input type="password" id="passwordInput" placeholder="Enter your password">
+            <button onclick="checkPassword()">Check</button>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            var password = document.getElementById("passwordInput").value;
+            var strength = calculatePasswordStrength(password);
+            displayStrength(strength);
+        }
+
+        function calculatePasswordStrength(password) {
+            var strength = 0;
+
+            if (password.length < 6) {
+                return "Very Weak";
+            }
+            else if (password.length < 10) {
+                strength += 1;
+            }
+            else {
+                strength += 2;
+            }
+
+            if (/[A-Z]/.test(password)) {
+                strength += 1;
+            }
+
+            if (/[a-z]/.test(password)) {
+                strength += 1;
+            }
+
+            if (/\d/.test(password)) {
+                strength += 1;
+            }
+
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                strength += 1;
+            }
+
+            if (!/\d{3,}/.test(password)) {
+                strength += 1;
+            }
+
+            if (!/\b\d{3}-\d{3}-\d{4}\b/.test(password)) {
+                strength += 1;
+            }
+
+            return convertStrengthToString(strength);
+        }
+
+        function convertStrengthToString(strength) {
+            switch (strength) {
+                case 0:
+                    return "Very Weak";
+                case 1:
+                    return "Weak";
+                case 2:
+                    return "Medium";
+                case 3:
+                    return "Strong";
+                case 4:
+                    return "Very Strong";
+                case 5:
+                    return "Excellent";
+                default:
+                    return "Unknown";
+            }
+        }
+
+        function displayStrength(strength) {
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "Password Strength: " + strength;
+        }
+    </script>
+</body>
+</html>
